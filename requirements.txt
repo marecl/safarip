@@ -1,0 +1,2 @@
+watchdog==6.0.0
+filetype==1.2.0

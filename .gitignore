@@ -1,0 +1,5 @@
+.venv
+.vscode
+__**
+*.sh
+.DS_Store
