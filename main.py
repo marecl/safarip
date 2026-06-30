@@ -1,22 +1,13 @@
 import sys
 import time
 import os
+import filetype
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from watchdog.events import FileCreatedEvent
 
 
 class Handler(FileSystemEventHandler):
-    allowed_mime = (
-        "video/mp4",
-        "video/quicktime",
-        "audio/mpeg",
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "image/heic",
-    )
 
     def nop(self, src_path: str):
         return
@@ -26,10 +17,17 @@ class Handler(FileSystemEventHandler):
             return
 
         file_name = os.path.basename(src_path)
+        file_extension = filetype.guess_extension(src_path)
+        file_extension = file_extension or "unknown"
         dst_path = os.path.join(self.output_dir, file_name)
+
         self.files_detected += 1
 
-        os.system(f'cp "{src_path}" "{dst_path}"')
+        os.system(
+            f'cp "{src_path}" "{dst_path}.{file_extension}"'
+        )
+        filetype.application_match
+        print(f"Copied [{file_extension}]\t{file_name}")
         return
 
     def __init__(self, watch_dir: str, output_dir: str | None = None):
@@ -42,7 +40,6 @@ class Handler(FileSystemEventHandler):
         if event.is_directory:
             return None
 
-        print("Detected:", event.src_path)
         self.copy_to_target_cb(event.src_path)
 
 
@@ -96,4 +93,3 @@ if __name__ == "__main__":
     files_detected = watch.run()
 
     print("Files detected:", files_detected)
-    os.system(f"./extender.zsh {copy_destination}/*")

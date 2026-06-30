@@ -41,5 +41,5 @@ Depending on Grok Imagine UI (they change once in a while), you might need to sc
 Video files will be saved only when downloaded (which is redundant, in a sense).
 
 ## TODO
-* Handle extension renaming internally
 * Human-readable filenames
+* Type/extension filtering
