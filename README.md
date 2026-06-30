@@ -2,8 +2,8 @@
 Rip media files from Safari cache effortlessly.  
 Targetting macOS 26.5.
 
-## Usages
-Creative work with Grok? You don't want to save every file manually? With Safarip you can just scroll through!
+## Usages  
+Creative work with Grok? You don't want to save every file manually? With Safarip you can just scroll through! Same goes for ChatGPT and (probably) other AI tools.
 
 ## Overview
 Safarip monitors cache directory of Safarip and saves newly added files.  
@@ -21,9 +21,8 @@ python main.py
 ## Usage
 You can run it through venv or with `run.zsh`.  
 Syntax: `python main.py [directory]`. 
-If specified, added files will be copied to `directory`. Output directory must exist before running the script.  
-`extender` will associate every file with appropriate extension for easier processing (media only). 
-If `directory` is not specified, only file detection messaege will appear.
+If specified, files will be immediately copied to `directory` with appropriate extension added. Output directory must exist before running the script.  
+If `directory` is not specified, only file detection message will appear.  
 
 1. Run script
 2. Prepare environment / website

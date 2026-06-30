@@ -9,25 +9,19 @@ from watchdog.events import FileCreatedEvent
 
 class Handler(FileSystemEventHandler):
 
-    def nop(self, src_path: str):
+    def nop(self, src_path: str, extension: str):
+        print(f"Detected: [{extension}]\t{os.path.basename(src_path)}")
         return
 
-    def copy_file(self, src_path: str):
-        if os.path.isdir(src_path):
-            return
-
+    def copy_file(self, src_path: str, extension: str):
         file_name = os.path.basename(src_path)
-        file_extension = filetype.guess_extension(src_path)
-        file_extension = file_extension or "unknown"
         dst_path = os.path.join(self.output_dir, file_name)
+        if not os.path.exists(src_path):
+            print(f"File disappeared before copying: {src_path}")
 
-        self.files_detected += 1
-
-        os.system(
-            f'cp "{src_path}" "{dst_path}.{file_extension}"'
-        )
+        os.system(f'cp "{src_path}" "{dst_path}.{extension}"')
         filetype.application_match
-        print(f"Copied [{file_extension}]\t{file_name}")
+        print(f"Copied: [{extension}]\t{file_name}")
         return
 
     def __init__(self, watch_dir: str, output_dir: str | None = None):
@@ -38,9 +32,13 @@ class Handler(FileSystemEventHandler):
 
     def on_created(self, event):
         if event.is_directory:
-            return None
+            return
 
-        self.copy_to_target_cb(event.src_path)
+        file_extension = filetype.guess_extension(event.src_path)
+        file_extension = file_extension or "none"
+        self.files_detected += 1
+
+        self.copy_to_target_cb(event.src_path, file_extension)
 
 
 class OnMyWatch:
